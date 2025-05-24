@@ -18,9 +18,6 @@ RUN useradd -m -d /opt/odoo -U -r -s /bin/bash odoo
 # Set workdir
 WORKDIR /opt/odoo
 
-# Clone Odoo from your GitHub fork
-RUN git clone -b 18.0 https://github.com/chintooflutter/odoo.git .
-
 # Upgrade pip and install Python dependencies
 RUN pip install --upgrade pip setuptools wheel
 RUN pip install -r requirements.txt
