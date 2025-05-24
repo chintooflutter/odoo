@@ -10,29 +10,36 @@ RUN apt-get update && apt-get install -y \
     libxslt-dev libzip-dev libldap2-dev libsasl2-dev \
     libjpeg-dev libpq-dev libxml2-dev libssl-dev \
     python3-dev libffi-dev zlib1g-dev \
-    node-less wkhtmltopdf
+    node-less wkhtmltopdf \
+ && rm -rf /var/lib/apt/lists/*
 
-# Create user
+# Create odoo user
 RUN useradd -m -d /opt/odoo -U -r -s /bin/bash odoo
 
-# Set workdir
+# Set working directory
 WORKDIR /opt/odoo
+
+# Copy only requirements.txt first to leverage Docker cache
+COPY requirements.txt .
 
 # Upgrade pip and install Python dependencies
 RUN pip install --upgrade pip setuptools wheel
 RUN pip install -r requirements.txt
 
-# Copy config
+# Now copy the rest of the Odoo source code
+COPY . .
+
+# Copy config file if you have one
 COPY odoo.conf /etc/odoo.conf
 
-# Set permissions
+# Change ownership of project files
 RUN chown -R odoo:odoo /opt/odoo
 
-# Expose port
+# Expose Odoo port
 EXPOSE 8069
 
-# Run as odoo user
+# Switch to odoo user
 USER odoo
 
-# Command to run Odoo
+# Default command
 CMD ["python3", "odoo-bin", "-c", "/etc/odoo.conf"]
