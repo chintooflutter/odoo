@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: odoo
+    env: docker
+    repo: https://github.com/chintooflutter/odoo/
+    branch: main
+    plan: free
+    healthCheckPath: /
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DB_HOST
+        fromService:
+          type: pserv
+          name: odoo-db
+      - key: DB_USER
+        value: odoo
+      - key: DB_PASSWORD
+        generateValue: true
+
+databases:
+  - name: odoo-db
+    databaseName: odoo
+    user: odoo
