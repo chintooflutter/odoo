@@ -1,30 +1,41 @@
-FROM python:3.10
+FROM python:3.10-slim
 
-# System dependencies
+# Set environment variables
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git wget node-less libjpeg-dev libpq-dev \
-    libsasl2-dev libldap2-dev build-essential \
-    libxml2-dev libxslt1-dev zlib1g-dev \
-    libevent-dev libssl-dev locales \
-    wkhtmltopdf
+    git build-essential wget \
+    libxslt-dev libzip-dev libldap2-dev libsasl2-dev \
+    libjpeg-dev libpq-dev libxml2-dev libssl-dev \
+    python3-dev libffi-dev zlib1g-dev \
+    node-less wkhtmltopdf
 
 # Create user
-RUN useradd -ms /bin/bash odoo
+RUN useradd -m -d /opt/odoo -U -r -s /bin/bash odoo
 
-# Set working directory
+# Set workdir
 WORKDIR /opt/odoo
 
-# Clone Odoo (you can change the version here)
-RUN git clone --depth 1 --branch 17.0 https://www.github.com/odoo/odoo /opt/odoo
+# Clone Odoo from your GitHub fork
+RUN git clone -b 18.0 https://github.com/chintooflutter/odoo.git .
 
-# Install Python dependencies
+# Upgrade pip and install Python dependencies
+RUN pip install --upgrade pip setuptools wheel
 RUN pip install -r requirements.txt
 
-# Copy custom config (if any)
+# Copy config
 COPY odoo.conf /etc/odoo.conf
+
+# Set permissions
+RUN chown -R odoo:odoo /opt/odoo
 
 # Expose port
 EXPOSE 8069
 
-# Set default command
+# Run as odoo user
+USER odoo
+
+# Command to run Odoo
 CMD ["python3", "odoo-bin", "-c", "/etc/odoo.conf"]
