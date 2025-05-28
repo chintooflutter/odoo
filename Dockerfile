@@ -23,5 +23,5 @@ USER odoo
 # Expose port (used by Odoo internally)
 EXPOSE 8069
 
-# Start Odoo using the configuration file
-CMD ["odoo", "--config=/etc/odoo/odoo.conf"]
+# Run entrypoint script that renders config and starts Odoo
+CMD ["/entrypoint.sh"]
