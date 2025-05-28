@@ -23,4 +23,4 @@ USER odoo
 EXPOSE 8069
 
 # Run Odoo
-CMD ["odoo"]
+CMD ["odoo", "-c", "/etc/odoo/odoo.conf"]
