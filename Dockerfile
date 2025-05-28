@@ -1,45 +1,26 @@
-FROM python:3.10-slim
+# Use the official Odoo image (adjust the version as needed: 18.0, 17.0, 16.0, etc.)
+FROM odoo:18.0
 
-# Set environment variables
+# Set environment variables (optional)
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
-# Install system dependencies
+# Install required packages (if any extra python packages are needed)
+USER root
 RUN apt-get update && apt-get install -y \
-    git build-essential wget \
-    libxslt-dev libzip-dev libldap2-dev libsasl2-dev \
-    libjpeg-dev libpq-dev libxml2-dev libssl-dev \
-    python3-dev libffi-dev zlib1g-dev \
-    node-less wkhtmltopdf \
- && rm -rf /var/lib/apt/lists/*
+    git \
+    nano \
+    && rm -rf /var/lib/apt/lists/*
 
-# Create odoo user
-RUN useradd -m -d /opt/odoo -U -r -s /bin/bash odoo
+# Optional: Add custom addons from a subdirectory in your repo
+COPY ./custom-addons /mnt/extra-addons
+RUN chown -R odoo:odoo /mnt/extra-addons
 
-# Set working directory
-WORKDIR /opt/odoo
-
-# Copy only requirements.txt first to leverage Docker cache
-COPY requirements.txt .
-
-# Upgrade pip and install Python dependencies
-RUN pip install --upgrade pip setuptools wheel
-RUN pip install -r requirements.txt
-
-# Now copy the rest of the Odoo source code
-COPY . .
-
-# Copy config file if you have one
-COPY odoo.conf /etc/odoo.conf
-
-# Change ownership of project files
-RUN chown -R odoo:odoo /opt/odoo
-
-# Expose Odoo port
-EXPOSE 8069
-
-# Switch to odoo user
+# Use the default user for Odoo
 USER odoo
 
-# Default command
-CMD ["python3", "odoo-bin", "-c", "/etc/odoo.conf"]
+# Expose port (used by Odoo internally)
+EXPOSE 8069
+
+# Run Odoo
+CMD ["odoo"]
