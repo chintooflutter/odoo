@@ -12,10 +12,6 @@ RUN apt-get update && apt-get install -y \
     nano \
     && rm -rf /var/lib/apt/lists/*
 
-# Optional: Add custom addons from a subdirectory in your repo
-COPY ./custom-addons /mnt/extra-addons
-RUN chown -R odoo:odoo /mnt/extra-addons
-
 # Use the default user for Odoo
 USER odoo
 
