@@ -12,8 +12,10 @@ RUN apt-get update && apt-get install -y \
     nano \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy the custom Odoo configuration
-COPY ./odoo.conf /etc/odoo/odoo.conf
+# Copy config template and entrypoint
+COPY ./odoo.conf.template /etc/odoo/odoo.conf.template
+COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # Use the default user for Odoo
 USER odoo
