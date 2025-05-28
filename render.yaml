@@ -3,7 +3,7 @@ services:
     name: odoo
     env: docker
     repo: https://github.com/YOUR_USERNAME/YOUR_REPO_NAME
-    branch: 18.0  # or your active Odoo branch
+    branch: 18.0  # Change to match your repo branch
     dockerfilePath: ./Dockerfile
     autoDeploy: true
     envVars:
@@ -11,9 +11,12 @@ services:
         fromService:
           type: pserv
           name: odoo-db
-          property: HOSTNAME
+          property: host
       - key: DB_PORT
-        value: 5432
+        fromService:
+          type: pserv
+          name: odoo-db
+          property: port
       - key: DB_USER
         value: odoo
       - key: DB_PASSWORD
