@@ -6,15 +6,15 @@ services:
     branch: 18.0  # Change to match your repo branch
     dockerfilePath: ./Dockerfile
     autoDeploy: true
-    envVars:
-      - key: DB_HOST
-        value: dpg-d0rlbnruibrs73dbottg-a
-      - key: DB_PORT
-        value: "5432"
-      - key: DB_USER
-        value: odoo
-      - key: DB_PASSWORD
-        value: 1SO6qhccBcUh13Z0HsTMpOZr3vnrgl2O
-      - key: DB_NAME
-        value: odoo_db_d4n9
+envVars:
+  - key: DB_HOST
+    value: dpg-d0rlbnruibrs73dbottg-a.singapore-postgres.render.com
+  - key: DB_PORT
+    value: "5432"
+  - key: DB_NAME
+    value: odoo_db_d4n9
+  - key: DB_USER
+    value: odoo
+  - key: DB_PASSWORD
+    value: 1SO6qhccBcUh13Z0HsTMpOZr3vnrgl2O
 
