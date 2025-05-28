@@ -8,27 +8,13 @@ services:
     autoDeploy: true
     envVars:
       - key: DB_HOST
-        fromService:
-          type: pserv
-          name: odoo-db
-          property: host
+        value: dpg-d0rlbnruibrs73dbottg-a
       - key: DB_PORT
-        fromService:
-          type: pserv
-          name: odoo-db
-          property: port
+        value: "5432"
       - key: DB_USER
         value: odoo
       - key: DB_PASSWORD
-        fromDatabase:
-          name: odoo-db
-          property: password
+        value: 1SO6qhccBcUh13Z0HsTMpOZr3vnrgl2O
       - key: DB_NAME
-        fromDatabase:
-          name: odoo-db
-          property: database
+        value: odoo_db_d4n9
 
-databases:
-  - name: odoo-db
-    databaseName: odoo
-    user: odoo
