@@ -12,11 +12,14 @@ RUN apt-get update && apt-get install -y \
     nano \
     && rm -rf /var/lib/apt/lists/*
 
+# Copy the custom Odoo configuration
+COPY ./odoo.conf /etc/odoo/odoo.conf
+
 # Use the default user for Odoo
 USER odoo
 
 # Expose port (used by Odoo internally)
 EXPOSE 8069
 
-# Run Odoo
-CMD ["bash", "-c", "odoo -d $DB_NAME --db_host=$DB_HOST --db_port=$DB_PORT --db_user=$DB_USER --db_password=$DB_PASSWORD"]
+# Start Odoo using the configuration file
+CMD ["odoo", "--config=/etc/odoo/odoo.conf"]
